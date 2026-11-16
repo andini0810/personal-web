@@ -106,7 +106,7 @@ const translations = {
       ],
     },
     portfolio: {
-      eyebrow: "SELECTED WORK / 01-03",
+      eyebrow: "SELECTED WORK / 01—02",
       title: "Projects I’ve explored.",
       introduction: "Three selected projects across health education, food management, and career mentorship.",
       projectLabel: "PROJECT",
@@ -276,7 +276,7 @@ const translations = {
       ],
     },
     portfolio: {
-      eyebrow: "KARYA PILIHAN / 01-03",
+      eyebrow: "KARYA PILIHAN / 01—02",
       title: "Proyek yang pernah kueksplorasi.",
       introduction: "Tiga proyek pilihan di bidang edukasi kesehatan, pengelolaan bahan makanan, dan mentoring karier.",
       projectLabel: "PROYEK",
