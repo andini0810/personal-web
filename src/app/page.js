@@ -43,7 +43,7 @@ const translations = {
           id: "expo",
           number: "02",
           label: "CAMPUS PROJECTS",
-          title: "Learning by making",
+          title: "Learning by creating",
           description: "Throughout college, I have taken part in expos and worked on different projects. Each experience gives me room to explore ideas, try new things, and learn through the process of making.",
           images: [
             { src: "/images/expo.jpeg", alt: "Andini taking part in a campus expo" },
@@ -59,10 +59,8 @@ const translations = {
           images: [
             { src: "/images/MC1.jpg", alt: "Andini hosting an event as an MC" },
             { src: "/images/MC2.jpg", alt: "Andini presenting at an event" },
-            { src: "/images/SS.jpeg", alt: "Andini with the Student Staff team" },
-            { src: "/images/SS2.jpeg", alt: "A Student Staff activity" },
+            { src: "/images/SS2(1).jpeg", alt: "A Student Staff activity" },
             { src: "/images/SS3.jpeg", alt: "Andini with her Student Staff friends" },
-            { src: "/images/SS4.jpg", alt: "A moment with the Student Staff team" },
           ],
         },
         {
@@ -83,6 +81,7 @@ const translations = {
     hobbies: {
       eyebrow: "A LITTLE OFF THE CLOCK",
       title: "Outside of class",
+      description: "A few small things that help me recharge, stay curious, and bring fresh energy into everything I do.",
       items: [
         { id: "movies", label: "Movie nights", object: "movies", popupLabel: "FAVORITE GENRES", genres: ["Thriller", "Romance", "Action"] },
         {
@@ -130,8 +129,11 @@ const translations = {
             "Translated research insights into accessible, user-centered learning experiences.",
           ],
           technologies: ["Figma"],
-          image: "/images/Bloom.png",
-          imageAlt: "Bloom adolescent reproductive health education platform screens",
+          images: [
+            { src: "/images/Bloom1.png", label: "Home page", alt: "Bloom home page design" },
+            { src: "/images/Bloom2.png", label: "Topics", alt: "Bloom health topics page design" },
+            { src: "/images/Bloom3.png", label: "Ask anonymusly", alt: "Bloom health assistant page design" },
+          ],
           url: "", // Add the Bloom demo URL here when it is available.
         },
         {
@@ -147,8 +149,10 @@ const translations = {
             "Promoted responsible consumption and production in line with UN SDG 12.",
           ],
           technologies: ["Figma", "Next.js", "TypeScript", "Gemini AI API"],
-          image: "/images/homeplate.png",
-          imageAlt: "HomePlate smart ingredient management and recipe recommendation screens",
+          images: [
+            { src: "/images/homeplate.jpg", label: "Desktop", alt: "HomePlate desktop landing page design" },
+            { src: "/images/homeplate1.png", label: "Mobile", alt: "HomePlate mobile landing page design" },
+          ],
           url: "", // Add the HomePlate demo URL here when it is available.
         },
         {
@@ -164,8 +168,9 @@ const translations = {
             "Learned how design and technology can work together to meet user needs.",
           ],
           technologies: ["Laravel", "MySQL", "AI-assisted Development"],
-          image: "/images/OJYMS.png",
-          imageAlt: "OJYMS career and alumni mentorship platform homepage",
+          images: [
+            { src: "/images/OJYMS.png", label: "Career portal", alt: "OJYMS career and alumni mentorship platform homepage" },
+          ],
           url: "", // Add the OJYMS demo URL here when it is available.
         },
       ],
@@ -185,7 +190,7 @@ const translations = {
     },
     hero: {
       eyebrow: "MAHASISWA INFORMATIKA",
-      titleLead: "Hai, aku",
+      titleLead: "Halo, aku",
       titleName: "Andini.",
       description:
         "Aku mahasiswa Informatika yang suka mencari tahu apa yang dibutuhkan pengguna dan bagaimana kebutuhan itu bisa diwujudkan jadi produk digital yang mudah dipakai. Lewat proyek kuliah, aku mengeksplorasi pengembangan perangkat lunak, quality assurance, dan desain UI/UX.",
@@ -229,10 +234,8 @@ const translations = {
           images: [
             { src: "/images/MC1.jpg", alt: "Andini menjadi MC di sebuah acara" },
             { src: "/images/MC2.jpg", alt: "Andini membawakan acara" },
-            { src: "/images/SS.jpeg", alt: "Andini bersama tim Student Staff" },
             { src: "/images/SS2.jpeg", alt: "Kegiatan Student Staff" },
             { src: "/images/SS3.jpeg", alt: "Andini bersama teman-teman Student Staff" },
-            { src: "/images/SS4.jpg", alt: "Momen bersama tim Student Staff" },
           ],
         },
         {
@@ -253,6 +256,7 @@ const translations = {
     hobbies: {
       eyebrow: "DI LUAR WAKTU KULIAH",
       title: "Di luar kuliah",
+      description: "Beberapa hal sederhana yang membantuku mengisi energi, tetap penasaran, dan membawa semangat baru ke berbagai aktivitas.",
       items: [
         { id: "movies", label: "Nonton film", object: "movies", popupLabel: "GENRE FILM FAVORIT", genres: ["Thriller", "Romance", "Action"] },
         {
@@ -300,8 +304,11 @@ const translations = {
             "Mengubah temuan riset menjadi pengalaman edukasi yang mudah diakses dan berpusat pada pengguna.",
           ],
           technologies: ["Figma"],
-          image: "/images/Bloom.png",
-          imageAlt: "Tampilan platform edukasi kesehatan reproduksi remaja Bloom",
+          images: [
+            { src: "/images/Bloom1.png", label: "Beranda", alt: "Desain halaman beranda Bloom" },
+            { src: "/images/Bloom2.png", label: "Topik", alt: "Desain halaman topik kesehatan Bloom" },
+            { src: "/images/Bloom3.png", label: "Asisten kesehatan", alt: "Desain asisten kesehatan Bloom" },
+          ],
           url: "", // Tambahkan URL demo Bloom di sini jika sudah tersedia.
         },
         {
@@ -317,8 +324,10 @@ const translations = {
             "Mendorong konsumsi dan produksi yang bertanggung jawab, selaras dengan SDG 12.",
           ],
           technologies: ["Figma", "Next.js", "TypeScript", "Gemini AI API"],
-          image: "/images/homeplate.png",
-          imageAlt: "Tampilan manajemen bahan dan rekomendasi menu HomePlate",
+          images: [
+            { src: "/images/homeplate.jpg", label: "Desktop", alt: "Desain halaman HomePlate versi desktop" },
+            { src: "/images/homeplate1.png", label: "Mobile", alt: "Desain halaman HomePlate versi ponsel" },
+          ],
           url: "", // Tambahkan URL demo HomePlate di sini jika sudah tersedia.
         },
         {
@@ -334,8 +343,9 @@ const translations = {
             "Mempelajari bagaimana desain dan teknologi dapat bekerja sama untuk menjawab kebutuhan pengguna.",
           ],
           technologies: ["Laravel", "MySQL", "AI-assisted Development"],
-          image: "/images/OJYMS.png",
-          imageAlt: "Halaman utama platform karier dan mentoring alumni OJYMS",
+          images: [
+            { src: "/images/OJYMS.png", label: "Portal karier", alt: "Halaman utama platform karier dan mentoring alumni OJYMS" },
+          ],
           url: "", // Tambahkan URL demo OJYMS di sini jika sudah tersedia.
         },
       ],
@@ -476,6 +486,7 @@ export default function Home() {
         <section className="hobbies-section" id="hobbies" aria-labelledby="hobbies-title">
           <p className="eyebrow">{copy.hobbies.eyebrow}</p>
           <h2 id="hobbies-title">{copy.hobbies.title}</h2>
+          <p className="hobbies-intro">{copy.hobbies.description}</p>
           <div className="hobby-grid">
             {copy.hobbies.items.map((hobby, index) => (
               <article className={`hobby-item hobby-item-${index + 1}`} key={hobby.id} data-open={activeHobby === hobby.id}>
@@ -611,28 +622,28 @@ export default function Home() {
                   </div>
 
                   <figure className="project-media">
-                    <div className="project-image-frame">
-                      {project.image ? (
-                        <Image
-                          className="project-image"
-                          src={project.image}
-                          alt={project.imageAlt}
-                          fill
-                          sizes="(max-width: 760px) 100vw, 50vw"
-                        />
-                      ) : (
-                        <div className={`project-image-placeholder project-image-placeholder-${index + 1}`}>
-                          <span className="placeholder-browser-bar" />
-                          <span className="placeholder-panel placeholder-panel-main" />
-                          <span className="placeholder-panel placeholder-panel-side" />
-                          <span className="placeholder-image-label">{copy.portfolio.imagePlaceholder}</span>
-                        </div>
-                      )}
+                    <div className={`project-gallery project-gallery-${project.id}`}>
+                      {project.images.map((image, imageIndex) => (
+                        <figure className={`project-gallery-item project-gallery-item-${project.id}-${imageIndex + 1}`} key={image.src}>
+                          <figcaption>{image.label}</figcaption>
+                          <div className="project-gallery-image">
+                            <Image
+                              src={image.src}
+                              alt={image.alt}
+                              fill
+                              sizes={
+                                project.id === "bloom" && imageIndex > 0
+                                  ? "(max-width: 760px) 42vw, (max-width: 1000px) 42vw, 23vw"
+                                  : project.id === "homeplate" && imageIndex === 1
+                                    ? "(max-width: 760px) 40vw, (max-width: 1000px) 24vw, 16vw"
+                                    : "(max-width: 760px) 92vw, (max-width: 1000px) 86vw, 48vw"
+                              }
+                            />
+                            <span className="project-image-index">{String(imageIndex + 1).padStart(2, "0")}</span>
+                          </div>
+                        </figure>
+                      ))}
                     </div>
-                    <figcaption>
-                      <span>{String(index + 1).padStart(2, "0")} / {String(copy.portfolio.projects.length).padStart(2, "0")}</span>
-                      <span>{project.title}</span>
-                    </figcaption>
                   </figure>
                 </article>
               ))}
