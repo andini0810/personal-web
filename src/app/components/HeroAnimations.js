@@ -43,22 +43,75 @@ export default function HeroAnimations({ children }) {
           "-=0.35",
         );
 
-      // Reveal About and Portfolio content as each section enters the viewport.
+      // Reveal project copy when it enters the viewport.
       gsap.utils
-        .toArray(".project-showcase, .page-footer > *")
-        .forEach((item) => {
-          gsap.from(item, {
-            y: 24,
-            autoAlpha: 0,
-            duration: 0.65,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: item,
-              start: "top 88%",
-              once: true,
-            },
+        .toArray(".project-showcase")
+        .forEach((project) => {
+          const projectCopy = project.querySelector(".project-copy");
+          const screenshots = project.querySelectorAll(".project-gallery-item");
+          if (projectCopy) {
+            gsap.fromTo(
+              projectCopy.children,
+              { y: 30, autoAlpha: 0 },
+              {
+                y: 0,
+                autoAlpha: 1,
+                duration: 0.7,
+                stagger: 0.1,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: projectCopy,
+                  start: "top 94%",
+                  once: true,
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
+          }
+
+          screenshots.forEach((screenshot, imageIndex) => {
+            const from = { y: 56, scale: 0.9, autoAlpha: 0 };
+
+            if (project.classList.contains("project-showcase-bloom")) {
+              if (imageIndex === 1) Object.assign(from, { x: 46, y: -28 });
+              if (imageIndex === 2) Object.assign(from, { x: -46, y: 34 });
+            }
+
+            if (project.classList.contains("project-showcase-homeplate") && imageIndex === 1) {
+              Object.assign(from, { x: -38, y: 38 });
+            }
+
+            gsap.fromTo(
+              screenshot,
+              from,
+              {
+                x: 0,
+                y: 0,
+                scale: 1,
+                autoAlpha: 1,
+                duration: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: screenshot,
+                  start: "top 98%",
+                  end: "top 60%",
+                  scrub: 0.65,
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
           });
         });
+
+      gsap.utils.toArray(".page-footer > *").forEach((item) => {
+        gsap.from(item, {
+          y: 18,
+          autoAlpha: 0,
+          duration: 0.55,
+          ease: "power3.out",
+          scrollTrigger: { trigger: item, start: "top 92%", once: true },
+        });
+      });
 
       // Pin the story section while vertical scrolling moves its chapters sideways.
       const storySection = pageRef.current?.querySelector(".about-section");
@@ -122,6 +175,9 @@ export default function HeroAnimations({ children }) {
           scrub: true,
         },
       });
+
+      // Recalculate trigger positions after the complete page animation setup.
+      ScrollTrigger.refresh();
     },
     { scope: pageRef },
   );

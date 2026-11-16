@@ -176,9 +176,16 @@ const translations = {
       ],
     },
     footer: {
-      madeWith: "MADE WITH CURIOSITY",
-      location: "YOGYAKARTA, INDONESIA",
-      scroll: "SCROLL TO EXPLORE ↓",
+      eyebrow: "LET'S CONNECT",
+      title: "Have a project in mind?",
+      description: "Feel free to reach out for internship opportunities, collaborations, or a friendly conversation.",
+      pending: "LINK COMING SOON",
+      contacts: [
+        { id: "instagram", label: "Instagram", value: "Add your Instagram link", href: "" }, // Add your Instagram URL here.
+        { id: "email", label: "Email", value: "andin.rmdhni0810@gmail.com", href: "mailto:andin.rmdhni0810@gmail.com" },
+        { id: "cv", label: "Resume / CV", value: "Add your CV file or link", href: "" }, // Add a CV file under public/ and set its path here.
+        { id: "figma", label: "Figma portfolio", value: "Add your Figma portfolio link", href: "" }, // Add your Figma URL here.
+      ],
     },
   },
   id: {
@@ -351,9 +358,16 @@ const translations = {
       ],
     },
     footer: {
-      madeWith: "DIBUAT DENGAN RASA INGIN TAHU",
-      location: "YOGYAKARTA, INDONESIA",
-      scroll: "GULIR UNTUK MELIHAT LEBIH LANJUT ↓",
+      eyebrow: "MARI TERHUBUNG",
+      title: "Punya ide untuk dikerjakan bersama?",
+      description: "Hubungi aku untuk kesempatan magang, kolaborasi, atau sekadar bertukar cerita.",
+      pending: "TAUTAN SEGERA DITAMBAHKAN",
+      contacts: [
+        { id: "instagram", label: "Instagram", value: "Tambahkan tautan Instagram", href: "" }, // Tambahkan URL Instagram di sini.
+        { id: "email", label: "Email", value: "andin.rmdhni0810@gmail.com", href: "mailto:andin.rmdhni0810@gmail.com" },
+        { id: "cv", label: "CV", value: "Tambahkan file atau tautan CV", href: "" }, // Tambahkan file CV ke public/ lalu isi path-nya di sini.
+        { id: "figma", label: "Portofolio Figma", value: "Tambahkan tautan portofolio Figma", href: "" }, // Tambahkan URL Figma di sini.
+      ],
     },
   },
 };
@@ -579,7 +593,7 @@ export default function Home() {
 
             <div className="project-list">
               {copy.portfolio.projects.map((project, index) => (
-                <article className="project-showcase" key={project.id}>
+                <article className={`project-showcase project-showcase-${project.id}`} key={project.id}>
                   <div className="project-copy">
                     <p className="project-type">{project.type}</p>
                     <h3>{project.title}</h3>
@@ -650,11 +664,41 @@ export default function Home() {
             </div>
           </div>
         </section>
-        {/* Footer: location and closing note at the end of the page. */}
-        <footer className="page-footer">
-          <span>{copy.footer.madeWith}</span>
-          <span>{copy.footer.location}</span>
-          <span>{copy.footer.scroll}</span>
+        {/* Contact footer: social links, email, CV, and design portfolio. */}
+        <footer className="page-footer contact-footer" id="contact">
+          <div className="contact-footer-intro">
+            <p className="eyebrow">{copy.footer.eyebrow}</p>
+            <h2>{copy.footer.title}</h2>
+            <p className="contact-footer-description">{copy.footer.description}</p>
+          </div>
+          <div className="contact-link-grid">
+            {copy.footer.contacts.map((contact) => {
+              const content = (
+                <>
+                  <span className="contact-link-label">{contact.label}</span>
+                  <span className="contact-link-value">{contact.value}</span>
+                  {contact.href && <span className="contact-link-arrow" aria-hidden="true">↗</span>}
+                  {!contact.href && <span className="contact-link-pending">{copy.footer.pending}</span>}
+                </>
+              );
+
+              return contact.href ? (
+                <a
+                  className="contact-link"
+                  href={contact.href}
+                  target={contact.id === "email" ? undefined : "_blank"}
+                  rel={contact.id === "email" ? undefined : "noreferrer"}
+                  key={contact.id}
+                >
+                  {content}
+                </a>
+              ) : (
+                <div className="contact-link contact-link-disabled" aria-disabled="true" key={contact.id}>
+                  {content}
+                </div>
+              );
+            })}
+          </div>
         </footer>
       </main>
     </HeroAnimations>
