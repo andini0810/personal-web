@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import HeroAnimations from "./components/HeroAnimations";
 
@@ -179,12 +179,11 @@ const translations = {
       eyebrow: "LET'S CONNECT",
       title: "Have a project in mind?",
       description: "Feel free to reach out for internship opportunities, collaborations, or a friendly conversation.",
-      pending: "LINK COMING SOON",
       contacts: [
-        { id: "instagram", label: "Instagram", value: "Add your Instagram link", href: "" }, // Add your Instagram URL here.
-        { id: "email", label: "Email", value: "andin.rmdhni0810@gmail.com", href: "mailto:andin.rmdhni0810@gmail.com" },
-        { id: "cv", label: "Resume / CV", value: "Add your CV file or link", href: "" }, // Add a CV file under public/ and set its path here.
-        { id: "figma", label: "Figma portfolio", value: "Add your Figma portfolio link", href: "" }, // Add your Figma URL here.
+        { id: "instagram", label: "Instagram", href: "https://www.instagram.com/andin.rmdhni?xtok=M3d2dGd0Y2NqbG9y&utm_source=qr" },
+        { id: "cv", label: "Resume / CV", href: "https://docs.google.com/document/d/1tz-54hzKYpVwIpwa4qhDB7nt4M2b1T0J/edit?usp=sharing&ouid=111152172913614939909&rtpof=true&sd=true" }, // Add a CV file under public/ and set its path here.
+        { id: "figma", label: "Portfolio", href: "https://www.figma.com/design/FN7cGRSw3KVC099VmhprxQ/Andini-Putri-Ramadhani_Portfolio?t=LEBYfxbqxxO9raFL-0" }, // Add your Figma URL here.
+        { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/andini-putri-ramadhani/" },
       ],
     },
   },
@@ -361,12 +360,11 @@ const translations = {
       eyebrow: "MARI TERHUBUNG",
       title: "Punya ide untuk dikerjakan bersama?",
       description: "Hubungi aku untuk kesempatan magang, kolaborasi, atau sekadar bertukar cerita.",
-      pending: "TAUTAN SEGERA DITAMBAHKAN",
       contacts: [
-        { id: "instagram", label: "Instagram", value: "Tambahkan tautan Instagram", href: "" }, // Tambahkan URL Instagram di sini.
-        { id: "email", label: "Email", value: "andin.rmdhni0810@gmail.com", href: "mailto:andin.rmdhni0810@gmail.com" },
-        { id: "cv", label: "CV", value: "Tambahkan file atau tautan CV", href: "" }, // Tambahkan file CV ke public/ lalu isi path-nya di sini.
-        { id: "figma", label: "Portofolio Figma", value: "Tambahkan tautan portofolio Figma", href: "" }, // Tambahkan URL Figma di sini.
+        { id: "instagram", label: "Instagram", href: "https://www.instagram.com/andin.rmdhni?xtok=M3d2dGd0Y2NqbG9y&utm_source=qr" },
+        { id: "cv", label: "CV", href: "" }, // Tambahkan file CV ke public/ lalu isi path-nya di sini.
+        { id: "figma", label: "Portofolio Figma", href: "" }, // Tambahkan URL Figma di sini.
+        { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/andini-putri-ramadhani/" },
       ],
     },
   },
@@ -375,11 +373,32 @@ const translations = {
 export default function Home() {
   const [language, setLanguage] = useState("en");
   const [activeHobby, setActiveHobby] = useState(null);
+  const [contactMenuOpen, setContactMenuOpen] = useState(false);
+  const contactMenuRef = useRef(null);
   const copy = translations[language];
 
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
+
+  useEffect(() => {
+    if (!contactMenuOpen) return undefined;
+
+    const closeOnOutsideClick = (event) => {
+      if (!contactMenuRef.current?.contains(event.target)) setContactMenuOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setContactMenuOpen(false);
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [contactMenuOpen]);
 
   return (
     <HeroAnimations>
@@ -388,9 +407,51 @@ export default function Home() {
         <header className="topbar" aria-label={copy.navigation.label}>
           <a className="wordmark" href="#home">ANDINI<span>—</span></a>
           <span className="topbar-note">{copy.navigation.note}</span>
-          <a className="topbar-link" href="mailto:hello@example.com">
-            {copy.navigation.contact}
-          </a>
+          <div
+            className={`contact-menu-wrap${contactMenuOpen ? " contact-menu-open" : ""}`}
+            ref={contactMenuRef}
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") setContactMenuOpen(true);
+            }}
+            onPointerLeave={(event) => {
+              if (event.pointerType === "mouse") setContactMenuOpen(false);
+            }}
+          >
+            <button
+              className="topbar-link contact-menu-trigger"
+              type="button"
+              aria-expanded={contactMenuOpen}
+              aria-controls="contact-popover"
+              onClick={() => {
+                const supportsHover = window.matchMedia("(hover: hover)").matches;
+                setContactMenuOpen((isOpen) => (supportsHover ? true : !isOpen));
+              }}
+            >
+              {copy.navigation.contact}
+            </button>
+            {contactMenuOpen && (
+              <div className="contact-popover" id="contact-popover" role="region" aria-label={copy.footer.eyebrow}>
+                <p className="contact-popover-heading">{copy.footer.eyebrow}</p>
+                <div className="contact-popover-links">
+                  {copy.footer.contacts.map((contact) => (
+                    contact.href ? (
+                      <a
+                        href={contact.href}
+                        key={contact.id}
+                        target={contact.id === "email" && !contact.href.startsWith("http") ? undefined : "_blank"}
+                        rel={contact.id === "email" && !contact.href.startsWith("http") ? undefined : "noreferrer"}
+                        onClick={() => setContactMenuOpen(false)}
+                      >
+                        {contact.label}<span aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      <span className="contact-popover-pending" key={contact.id}>{contact.label}</span>
+                    )
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <div className="language-switch" aria-label={copy.navigation.languageLabel}>
             <svg viewBox="0 0 24 24" aria-hidden="true" className="language-globe">
               <circle cx="12" cy="12" r="9" />
@@ -672,13 +733,12 @@ export default function Home() {
             <p className="contact-footer-description">{copy.footer.description}</p>
           </div>
           <div className="contact-link-grid">
-            {copy.footer.contacts.map((contact) => {
+            {copy.footer.contacts.map((contact, index) => {
               const content = (
                 <>
-                  <span className="contact-link-label">{contact.label}</span>
-                  <span className="contact-link-value">{contact.value}</span>
+                  <span className="contact-link-index">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="contact-link-name">{contact.label}</span>
                   {contact.href && <span className="contact-link-arrow" aria-hidden="true">↗</span>}
-                  {!contact.href && <span className="contact-link-pending">{copy.footer.pending}</span>}
                 </>
               );
 
@@ -686,8 +746,8 @@ export default function Home() {
                 <a
                   className="contact-link"
                   href={contact.href}
-                  target={contact.id === "email" ? undefined : "_blank"}
-                  rel={contact.id === "email" ? undefined : "noreferrer"}
+                  target={contact.id === "email" && !contact.href.startsWith("http") ? undefined : "_blank"}
+                  rel={contact.id === "email" && !contact.href.startsWith("http") ? undefined : "noreferrer"}
                   key={contact.id}
                 >
                   {content}
