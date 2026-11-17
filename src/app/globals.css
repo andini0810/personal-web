@@ -1043,6 +1043,80 @@ html { overflow-x: clip; }
 .music-service-icon { width: 30px; height: 30px; }
 .music-link-arrow { display: none !important; }
 
+/* Movie Nights keeps the existing hobby card and expands its hover/focus panel. */
+.hobby-item-movies .hobby-popover {
+  right: auto;
+  left: 50%;
+  width: min(520px, calc(100vw - 40px));
+  max-height: min(68svh, 580px);
+  align-content: start;
+  justify-items: stretch;
+  gap: 12px;
+  overflow-y: auto;
+  padding: 18px;
+  border: 1px solid var(--color-frame);
+  background: #fffefa;
+  box-shadow: 0 16px 36px rgba(38, 40, 36, .16);
+  transform: translate(-50%, 18px) scale(.97);
+}
+.hobby-item-movies:hover .hobby-popover,
+.hobby-item-movies:focus-within .hobby-popover,
+.hobby-item-movies[data-open="true"] .hobby-popover {
+  transform: translate(-50%, 0) scale(1);
+}
+.movie-panel { display: grid; justify-items: stretch; gap: 12px; }
+.movie-panel > .popover-kicker { display: block; }
+.movie-panel-message,
+.movie-panel-hint { margin: 0; color: var(--color-muted); font-size: 12px; line-height: 1.6; }
+.movie-retry-button {
+  margin-top: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-frame);
+  color: var(--color-ink);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.movie-retry-button:hover,
+.movie-retry-button:focus-visible { border-color: var(--color-editorial); color: var(--color-editorial); }
+.movie-poster-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.movie-poster-button {
+  display: grid;
+  min-width: 0;
+  gap: 7px;
+  padding: 5px;
+  border: 1px solid transparent;
+  color: var(--color-ink);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.movie-poster-button:hover,
+.movie-poster-button:focus-visible,
+.movie-poster-button.is-selected { border-color: var(--color-editorial); outline: none; }
+.movie-poster-frame { position: relative; display: block; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; background: var(--color-frame); }
+.movie-poster-image { object-fit: cover; }
+.movie-poster-fallback { display: grid; width: 100%; height: 100%; place-items: center; color: var(--color-editorial); font-family: var(--font-display); font-size: 44px; }
+.movie-poster-title { display: -webkit-box; overflow: hidden; font-size: 11px; font-weight: 600; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.movie-detail { display: grid; gap: 9px; padding-top: 12px; border-top: 1px solid var(--color-frame); }
+.movie-detail-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.movie-detail h4 { margin: 0; font-family: var(--font-display); font-size: 20px; font-weight: 500; line-height: 1.15; }
+.movie-metadata { display: flex; flex-shrink: 0; gap: 10px; color: var(--color-muted); font-family: var(--font-label); font-size: 9px; }
+.movie-metadata span { display: grid; gap: 3px; }
+.movie-metadata strong,
+.movie-genres > strong { color: var(--color-muted); font-size: 7px; font-weight: 400; letter-spacing: .08em; }
+.movie-overview { max-height: 112px; overflow-y: auto; margin: 0; color: var(--color-muted); font-size: 11px; line-height: 1.65; }
+.movie-genres { display: grid; gap: 6px; }
+.movie-genres .genre-list { justify-content: flex-start; gap: 6px; }
+.movie-genres .genre-tag { padding: 5px 8px; font-size: 8px; }
+.movie-source-link { justify-self: start; color: var(--color-editorial); font-family: var(--font-label); font-size: 9px; }
+.movie-source-link span { margin-left: 4px; }
+.tmdb-attribution { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 6px 10px; padding-top: 10px; border-top: 1px solid var(--color-frame); }
+.tmdb-attribution .popover-kicker { display: block; }
+.tmdb-attribution a { justify-self: end; line-height: 0; }
+.tmdb-attribution img { width: 76px; height: auto; }
+.tmdb-attribution p { grid-column: 1 / -1; margin: 0; color: var(--color-muted); font-size: 9px; line-height: 1.45; }
+
 @media (min-width: 761px) and (max-width: 1000px) {
   .hobby-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hobby-item:last-child { grid-column: 1 / -1; width: min(100%, 50%); justify-self: center; }
@@ -1083,6 +1157,31 @@ html { overflow-x: clip; }
     padding: 10px;
     transform: translateY(7px) scale(.98);
   }
+  .hobby-item-movies .hobby-popover {
+    top: auto;
+    right: auto;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    width: min(520px, calc(100vw - 32px));
+    max-height: min(68svh, 580px);
+    padding: 14px;
+    transform: translate(-50%, 12px) scale(.98);
+  }
+  .hobby-item-movies:hover .hobby-popover,
+  .hobby-item-movies:focus-within .hobby-popover,
+  .hobby-item-movies[data-open="true"] .hobby-popover { transform: translate(-50%, 0) scale(1); }
+  .movie-panel { gap: 9px; }
+  .movie-poster-list { gap: 5px; }
+  .movie-poster-button { gap: 4px; padding: 3px; }
+  .movie-poster-title { font-size: 9px; }
+  .movie-detail { gap: 7px; padding-top: 9px; }
+  .movie-detail-heading { display: grid; gap: 6px; }
+  .movie-detail h4 { font-size: 17px; }
+  .movie-metadata { font-size: 8px; }
+  .movie-overview { max-height: 100px; font-size: 10px; }
+  .movie-panel-message,
+  .movie-panel-hint { font-size: 10px; }
+  .tmdb-attribution p { font-size: 8px; }
   .hobby-item:hover .hobby-popover,
   .hobby-item:focus-within .hobby-popover,
   .hobby-item[data-open="true"] .hobby-popover { transform: translateY(0) scale(1); }

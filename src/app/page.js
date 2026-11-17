@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HeroAnimations from "./components/HeroAnimations";
 
 // Keep copy grouped by page section so future sections can reuse this pattern.
@@ -27,7 +28,7 @@ const translations = {
     about: {
       eyebrow: "A LITTLE ABOUT ME",
       title: "My story so far.",
-      instruction: "Scroll or swipe to move through the chapters",
+      instruction: "Scroll to move through the chapters",
       slides: [
         {
           id: "informatics",
@@ -81,7 +82,7 @@ const translations = {
       title: "Outside of class",
       description: "A few small things that help me recharge, stay curious, and bring fresh energy into everything I do.",
       items: [
-        { id: "movies", label: "Movie nights", object: "movies", popupLabel: "FAVORITE GENRES", genres: ["Thriller", "Romance", "Action"] },
+        { id: "movies", label: "Movie nights", object: "movies", popupLabel: "FAVORITE SHOWS" },
         {
           id: "music",
           label: "Listening to music",
@@ -101,6 +102,22 @@ const translations = {
           equipmentLabels: ["Barbell", "Smith machine", "Dumbbells"],
         },
       ],
+      moviePanel: {
+        loading: "Loading your favorite shows…",
+        choose: "Choose a poster to see more details.",
+        retry: "Try again",
+        setupError: "Add TMDB_API_READ_ACCESS_TOKEN to .env.local, then restart the server.",
+        loadError: "The shows could not be loaded. Check your connection and try again.",
+        notFound: "This title could not be found on TMDB.",
+        noOverview: "No synopsis is available.",
+        year: "YEAR",
+        rating: "RATING",
+        genres: "GENRES",
+        credits: "CREDITS",
+        openTitle: "Show details for",
+        viewSource: "View on TMDB",
+        attribution: "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+      },
     },
     portfolio: {
       eyebrow: "SELECTED WORK / 01—03",
@@ -260,7 +277,7 @@ const translations = {
       title: "Di luar kuliah",
       description: "Beberapa hal sederhana yang membantuku mengisi energi, tetap penasaran, dan membawa semangat baru ke berbagai aktivitas.",
       items: [
-        { id: "movies", label: "Nonton film", object: "movies", popupLabel: "GENRE FILM FAVORIT", genres: ["Thriller", "Romance", "Action"] },
+        { id: "movies", label: "Nonton film", object: "movies", popupLabel: "TONTONAN FAVORIT" },
         {
           id: "music",
           label: "Denger musik",
@@ -280,9 +297,25 @@ const translations = {
           equipmentLabels: ["Barbel", "Smith machine", "Dumbbell"],
         },
       ],
+      moviePanel: {
+        loading: "Memuat film dan serial favoritmu…",
+        choose: "Pilih poster untuk melihat detailnya.",
+        retry: "Coba lagi",
+        setupError: "Tambahkan TMDB_API_READ_ACCESS_TOKEN ke .env.local, lalu mulai ulang server.",
+        loadError: "Tontonan belum bisa dimuat. Periksa koneksi lalu coba lagi.",
+        notFound: "Judul ini tidak ditemukan di TMDB.",
+        noOverview: "Sinopsis belum tersedia.",
+        year: "TAHUN",
+        rating: "RATING",
+        genres: "GENRE",
+        credits: "KREDIT",
+        openTitle: "Lihat detail",
+        viewSource: "Lihat di TMDB",
+        attribution: "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+      },
     },
     portfolio: {
-      eyebrow: "KARYA PILIHAN / 01—02",
+      eyebrow: "KARYA PILIHAN / 01—03",
       title: "Proyek yang pernah kueksplorasi.",
       introduction: "Tiga proyek pilihan di bidang edukasi kesehatan, pengelolaan bahan makanan, dan mentoring karier.",
       projectLabel: "PROYEK",
@@ -311,7 +344,7 @@ const translations = {
             { src: "/images/Bloom2.png", label: "Topik", alt: "Desain halaman topik kesehatan Bloom" },
             { src: "/images/Bloom3.png", label: "Asisten kesehatan", alt: "Desain asisten kesehatan Bloom" },
           ],
-          url: "", // Tambahkan URL demo Bloom di sini jika sudah tersedia.
+          url: "https://www.figma.com/design/cj4kaQqU6BfGDyJsbbhneg/Bloom?node-id=0-1&t=ON5YMrIHiq0Be8qv-1",
         },
         {
           id: "homeplate",
@@ -330,7 +363,7 @@ const translations = {
             { src: "/images/homeplate.jpg", label: "Desktop", alt: "Desain halaman HomePlate versi desktop" },
             { src: "/images/homeplate1.png", label: "Mobile", alt: "Desain halaman HomePlate versi ponsel" },
           ],
-          url: "", // Tambahkan URL demo HomePlate di sini jika sudah tersedia.
+          url: "https://homeplate-zeta.vercel.app/",
         },
         {
           id: "ojyms",
@@ -348,7 +381,7 @@ const translations = {
           images: [
             { src: "/images/OJYMS.png", label: "Portal karier", alt: "Halaman utama platform karier dan mentoring alumni OJYMS" },
           ],
-          url: "", // Tambahkan URL demo OJYMS di sini jika sudah tersedia.
+          url: "https://github.com/andini0810/OJYMS",
         },
       ],
     },
@@ -358,8 +391,8 @@ const translations = {
       description: "Hubungi aku untuk kesempatan magang, kolaborasi, atau sekadar bertukar cerita.",
       contacts: [
         { id: "instagram", label: "Instagram", href: "https://www.instagram.com/andin.rmdhni?xtok=M3d2dGd0Y2NqbG9y&utm_source=qr" },
-        { id: "cv", label: "CV", href: "" }, // Tambahkan file CV ke public/ lalu isi path-nya di sini.
-        { id: "figma", label: "Portofolio Figma", href: "" }, // Tambahkan URL Figma di sini.
+        { id: "cv", label: "CV", href: "https://docs.google.com/document/d/1tz-54hzKYpVwIpwa4qhDB7nt4M2b1T0J/edit?usp=sharing&ouid=111152172913614939909&rtpof=true&sd=true" },
+        { id: "figma", label: "Portofolio Figma", href: "https://www.figma.com/design/FN7cGRSw3KVC099VmhprxQ/Andini-Putri-Ramadhani_Portfolio?t=LEBYfxbqxxO9raFL-0" },
         { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/andini-putri-ramadhani/" },
       ],
     },
@@ -370,12 +403,72 @@ export default function Home() {
   const [language, setLanguage] = useState("en");
   const [activeHobby, setActiveHobby] = useState(null);
   const [contactMenuOpen, setContactMenuOpen] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const [moviePanels, setMoviePanels] = useState({});
   const contactMenuRef = useRef(null);
+  const movieDataCache = useRef(new Map());
+  const movieRequests = useRef(new Set());
   const copy = translations[language];
+  const moviePanelCopy = copy.hobbies.moviePanel;
+  const moviePanel = moviePanels[language] ?? { status: "idle", movies: [] };
+  const selectedMovie = moviePanel.movies.find((movie) => movie.key === selectedMovieId);
+
+  const loadMovies = useCallback(async (requestedLanguage) => {
+    if (movieDataCache.current.has(requestedLanguage)) {
+      setMoviePanels((current) => ({
+        ...current,
+        [requestedLanguage]: {
+          status: "success",
+          movies: movieDataCache.current.get(requestedLanguage),
+        },
+      }));
+      return;
+    }
+
+    if (movieRequests.current.has(requestedLanguage)) return;
+    movieRequests.current.add(requestedLanguage);
+    setMoviePanels((current) => ({
+      ...current,
+      [requestedLanguage]: { status: "loading", movies: [] },
+    }));
+
+    try {
+      const response = await fetch(`/api/movies?language=${requestedLanguage}`);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.code || "TMDB_UNAVAILABLE");
+      }
+
+      movieDataCache.current.set(requestedLanguage, result.movies);
+      setMoviePanels((current) => ({
+        ...current,
+        [requestedLanguage]: { status: "success", movies: result.movies },
+      }));
+    } catch (error) {
+      setMoviePanels((current) => ({
+        ...current,
+        [requestedLanguage]: {
+          status: "error",
+          movies: [],
+          error: error.message,
+        },
+      }));
+    } finally {
+      movieRequests.current.delete(requestedLanguage);
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = language;
+    const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => window.cancelAnimationFrame(refreshFrame);
   }, [language]);
+
+  useEffect(() => {
+    if (activeHobby === "movies") loadMovies(language);
+  }, [activeHobby, language, loadMovies]);
 
   useEffect(() => {
     if (!contactMenuOpen) return undefined;
@@ -551,14 +644,27 @@ export default function Home() {
           <p className="hobbies-intro">{copy.hobbies.description}</p>
           <div className="hobby-grid">
             {copy.hobbies.items.map((hobby, index) => (
-              <article className={`hobby-item hobby-item-${index + 1}`} key={hobby.id} data-open={activeHobby === hobby.id}>
+              <article
+                className={`hobby-item hobby-item-${index + 1}${hobby.id === "movies" ? " hobby-item-movies" : ""}`}
+                key={hobby.id}
+                data-open={activeHobby === hobby.id}
+                onPointerEnter={(event) => {
+                  if (hobby.id === "movies" && event.pointerType === "mouse") loadMovies(language);
+                }}
+              >
                 <button
                   className={`hobby-trigger hobby-trigger-${hobby.object}`}
                   type="button"
                   aria-label={hobby.label}
                   aria-expanded={activeHobby === hobby.id}
                   aria-controls={`hobby-popover-${hobby.id}`}
-                  onClick={() => setActiveHobby(activeHobby === hobby.id ? null : hobby.id)}
+                  onFocus={() => {
+                    if (hobby.id === "movies") loadMovies(language);
+                  }}
+                  onClick={() => {
+                    if (hobby.id === "movies") loadMovies(language);
+                    setActiveHobby(activeHobby === hobby.id ? null : hobby.id);
+                  }}
                 >
                   {hobby.object === "movies" && <span className="netflix-mark" aria-hidden="true">N</span>}
                   {hobby.object === "music" && (
@@ -570,11 +676,100 @@ export default function Home() {
                 </button>
                 <h3>{hobby.label}</h3>
                 <div className="hobby-popover" id={`hobby-popover-${hobby.id}`}>
-                  {hobby.genres && (
-                    <div className="hobby-popover-content">
+                  {hobby.id === "movies" && (
+                    <div className="hobby-popover-content movie-panel">
                       <span className="popover-kicker">NETFLIX · {hobby.popupLabel}</span>
-                      <div className="genre-list">
-                        {hobby.genres.map((genre) => <span className="genre-tag" key={genre}>{genre}</span>)}
+
+                      {moviePanel.status === "loading" && (
+                        <p className="movie-panel-message" role="status">{moviePanelCopy.loading}</p>
+                      )}
+
+                      {moviePanel.status === "error" && (
+                        <div className="movie-panel-message" role="alert">
+                          <p>{moviePanel.error === "TMDB_TOKEN_MISSING" ? moviePanelCopy.setupError : moviePanelCopy.loadError}</p>
+                          <button className="movie-retry-button" type="button" onClick={() => loadMovies(language)}>
+                            {moviePanelCopy.retry}
+                          </button>
+                        </div>
+                      )}
+
+                      {moviePanel.status === "success" && (
+                        <>
+                          <div className="movie-poster-list">
+                            {moviePanel.movies.map((movie) => (
+                              <button
+                                className={`movie-poster-button${selectedMovieId === movie.key ? " is-selected" : ""}`}
+                                type="button"
+                                key={movie.key}
+                                aria-label={`${moviePanelCopy.openTitle}: ${movie.title || movie.requestedTitle}`}
+                                aria-pressed={selectedMovieId === movie.key}
+                                onClick={() => setSelectedMovieId(movie.key)}
+                              >
+                                <span className="movie-poster-frame">
+                                  {movie.posterUrl ? (
+                                    <Image
+                                      className="movie-poster-image"
+                                      src={movie.posterUrl}
+                                      alt=""
+                                      fill
+                                      sizes="(max-width: 760px) 25vw, 110px"
+                                      unoptimized
+                                    />
+                                  ) : (
+                                    <span className="movie-poster-fallback" aria-hidden="true">N</span>
+                                  )}
+                                </span>
+                                <span className="movie-poster-title">{movie.title || movie.requestedTitle}</span>
+                              </button>
+                            ))}
+                          </div>
+
+                          {selectedMovie ? (
+                            <div className="movie-detail" aria-live="polite">
+                              {selectedMovie.found ? (
+                                <>
+                                  <div className="movie-detail-heading">
+                                    <h4>{selectedMovie.title}</h4>
+                                    <div className="movie-metadata">
+                                      <span><strong>{moviePanelCopy.year}</strong>{selectedMovie.year || "—"}</span>
+                                      <span><strong>{moviePanelCopy.rating}</strong>{selectedMovie.rating ? `★ ${selectedMovie.rating}` : "—"}</span>
+                                    </div>
+                                  </div>
+                                  <p className="movie-overview">{selectedMovie.overview || moviePanelCopy.noOverview}</p>
+                                  {selectedMovie.genres.length > 0 && (
+                                    <div className="movie-genres">
+                                      <strong>{moviePanelCopy.genres}</strong>
+                                      <div className="genre-list">
+                                        {selectedMovie.genres.map((genre) => <span className="genre-tag" key={genre}>{genre}</span>)}
+                                      </div>
+                                    </div>
+                                  )}
+                                  <a className="movie-source-link" href={selectedMovie.tmdbUrl} target="_blank" rel="noreferrer">
+                                    {moviePanelCopy.viewSource} <span aria-hidden="true">↗</span>
+                                  </a>
+                                </>
+                              ) : (
+                                <p className="movie-panel-message">{moviePanelCopy.notFound}</p>
+                              )}
+                            </div>
+                          ) : (
+                            <p className="movie-panel-hint">{moviePanelCopy.choose}</p>
+                          )}
+                        </>
+                      )}
+
+                      <div className="tmdb-attribution">
+                        <span className="popover-kicker">{moviePanelCopy.credits}</span>
+                        <a href="https://www.themoviedb.org" target="_blank" rel="noreferrer" aria-label="The Movie Database website">
+                          <Image
+                            src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
+                            alt="The Movie Database (TMDB)"
+                            width={88}
+                            height={18}
+                            unoptimized
+                          />
+                        </a>
+                        <p>{moviePanelCopy.attribution}</p>
                       </div>
                     </div>
                   )}
