@@ -106,7 +106,7 @@ const translations = {
         loading: "Loading your favorite shows…",
         choose: "Choose a poster to see more details.",
         retry: "Try again",
-        setupError: "Add TMDB_API_READ_ACCESS_TOKEN to .env.local, then restart the server.",
+        setupError: "TMDB_API_READ_ACCESS_TOKEN is missing from the server environment. Configure it, then restart or redeploy the site.",
         loadError: "The shows could not be loaded. Check your connection and try again.",
         notFound: "This title could not be found on TMDB.",
         noOverview: "No synopsis is available.",
@@ -223,7 +223,7 @@ const translations = {
     about: {
       eyebrow: "SEDIKIT TENTANGKU",
       title: "Ceritaku sejauh ini.",
-      instruction: "Scroll atau geser untuk melihat ceritaku",
+      instruction: "Scroll untuk melihat ceritaku",
       slides: [
         {
           id: "informatics",
@@ -301,7 +301,7 @@ const translations = {
         loading: "Memuat film dan serial favoritmu…",
         choose: "Pilih poster untuk melihat detailnya.",
         retry: "Coba lagi",
-        setupError: "Tambahkan TMDB_API_READ_ACCESS_TOKEN ke .env.local, lalu mulai ulang server.",
+        setupError: "TMDB_API_READ_ACCESS_TOKEN belum diatur di environment server. Atur variabelnya, lalu mulai ulang atau deploy ulang situs.",
         loadError: "Tontonan belum bisa dimuat. Periksa koneksi lalu coba lagi.",
         notFound: "Judul ini tidak ditemukan di TMDB.",
         noOverview: "Sinopsis belum tersedia.",
