@@ -1097,3 +1097,49 @@ html { overflow-x: clip; }
   .hobby-trigger,
   .hobby-popover { transition: none; }
 }
+
+/* Keep the contact menu centered and fully visible on narrow screens. */
+@media (max-width: 760px) {
+  .contact-menu-open::after { display: none; }
+  .contact-popover {
+    position: fixed;
+    top: 78px;
+    right: auto;
+    left: 50%;
+    width: min(330px, calc(100vw - 32px));
+    transform: translateX(-50%);
+  }
+
+  /* Mobile visitors can swipe horizontally between story chapters. */
+  .about-section {
+    min-height: 0;
+    align-items: stretch;
+    overflow: visible;
+  }
+  .story-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .story-viewport:focus-visible { outline: 2px solid var(--color-editorial); outline-offset: 4px; }
+  .story-viewport::-webkit-scrollbar { display: none; }
+  .story-track {
+    width: 100%;
+    flex-direction: row;
+    transform: none !important;
+  }
+  .story-slide {
+    width: 100%;
+    min-height: 0;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    padding: 0 12px 18px;
+  }
+  .story-card { min-height: 0; }
+}
+
+/* The hero portrait remains the only studio visual. */
+.studio-laptop,
+.studio-note { display: none; }

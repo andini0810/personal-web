@@ -21,15 +21,13 @@ const translations = {
         "I’m an Informatics student who enjoys figuring out what users need and how to turn those needs into digital products that are easy to use. Through university projects, I’ve explored software development, quality assurance, and UI/UX design.",
       button: "EXPLORE MY STORY",
       portraitLabel: "Portrait of Andini",
-      laptop: "A LITTLE WORK IN PROGRESS",
-      note: "ideas in progress|keep exploring ↗",
       photoIndex: "FIG. 01 — A WORK IN PROGRESS",
       sideNote: "PERSONAL WEBSITE / 2026",
     },
     about: {
       eyebrow: "A LITTLE ABOUT ME",
       title: "My story so far.",
-      instruction: "Scroll to move through the chapters",
+      instruction: "Scroll or swipe to move through the chapters",
       slides: [
         {
           id: "informatics",
@@ -90,8 +88,8 @@ const translations = {
           object: "music",
           popupLabel: "MUSIC PROFILES",
           profiles: [
-            { name: "Spotify", url: "" }, // Add your Spotify profile URL here.
-            { name: "Apple Music", url: "" }, // Add your Apple Music profile URL here.
+            { name: "Spotify", url: "https://open.spotify.com/user/8kmyc15515218d3yapxsnzj8j?si=f468818c5af742a4" },
+            { name: "Apple Music", url: "https://music.apple.com/profile/andinirmdhni" },
           ],
         },
         {
@@ -105,7 +103,7 @@ const translations = {
       ],
     },
     portfolio: {
-      eyebrow: "SELECTED WORK / 01—02",
+      eyebrow: "SELECTED WORK / 01—03",
       title: "Projects I’ve explored.",
       introduction: "Three selected projects across health education, food management, and career mentorship.",
       projectLabel: "PROJECT",
@@ -202,15 +200,13 @@ const translations = {
         "Aku mahasiswa Informatika yang suka mencari tahu apa yang dibutuhkan pengguna dan bagaimana kebutuhan itu bisa diwujudkan jadi produk digital yang mudah dipakai. Lewat proyek kuliah, aku mengeksplorasi pengembangan perangkat lunak, quality assurance, dan desain UI/UX.",
       button: "KENALI CERITAKU",
       portraitLabel: "Foto Andini",
-      laptop: "SEDANG DALAM PROSES",
-      note: "ide yang sedang tumbuh|terus bereksplorasi ↗",
       photoIndex: "FIG. 01 — MASIH DALAM PROSES",
       sideNote: "SITUS PRIBADI / 2026",
     },
     about: {
       eyebrow: "SEDIKIT TENTANGKU",
       title: "Ceritaku sejauh ini.",
-      instruction: "Scroll untuk melihat ceritaku",
+      instruction: "Scroll atau geser untuk melihat ceritaku",
       slides: [
         {
           id: "informatics",
@@ -271,8 +267,8 @@ const translations = {
           object: "music",
           popupLabel: "PROFIL MUSIK",
           profiles: [
-            { name: "Spotify", url: "" }, // Tambahkan URL profil Spotify di sini.
-            { name: "Apple Music", url: "" }, // Tambahkan URL profil Apple Music di sini.
+            { name: "Spotify", url: "https://open.spotify.com/user/8kmyc15515218d3yapxsnzj8j?si=f468818c5af742a4" }, // Tambahkan URL profil Spotify di sini.
+            { name: "Apple Music", url: "https://music.apple.com/profile/andinirmdhni" }, // Tambahkan URL profil Apple Music di sini.
           ],
         },
         {
@@ -502,15 +498,6 @@ export default function Home() {
                 priority
               />
             </div>
-            <div className="studio-laptop" aria-hidden="true">
-              <span className="laptop-screen">{copy.hero.laptop}</span>
-              <span className="laptop-base" />
-            </div>
-            <p className="studio-note">
-              {copy.hero.note.split("|").map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </p>
             <span className="photo-index">{copy.hero.photoIndex}</span>
           </div>
           <span className="side-note">{copy.hero.sideNote}</span>
@@ -523,7 +510,7 @@ export default function Home() {
             <h2 id="about-title">{copy.about.title}</h2>
             <p className="story-instruction">{copy.about.instruction}<span aria-hidden="true"> →</span></p>
           </div>
-          <div className="story-viewport">
+          <div className="story-viewport" role="region" aria-label={copy.about.instruction} tabIndex={0}>
             <div className="story-track">
               {copy.about.slides.map((slide) => (
                 <article className="story-slide" key={slide.id} aria-label={`${slide.number}. ${slide.title}`}>

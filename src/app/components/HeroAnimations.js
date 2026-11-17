@@ -117,37 +117,41 @@ export default function HeroAnimations({ children }) {
       const storySection = pageRef.current?.querySelector(".about-section");
       const storyTrack = pageRef.current?.querySelector(".story-track");
       const storyViewport = pageRef.current?.querySelector(".story-viewport");
+      const storyMedia = gsap.matchMedia();
 
       if (storySection && storyTrack && storyViewport) {
-        const getScrollDistance = () => storyTrack.scrollWidth - storyViewport.clientWidth;
-        const slideCount = storyTrack.children.length;
-        const scrollHoldMultiplier = 1.35;
+        storyMedia.add("(min-width: 761px)", () => {
+          const getScrollDistance = () => storyTrack.scrollWidth - storyViewport.clientWidth;
+          const slideCount = storyTrack.children.length;
+          const scrollHoldMultiplier = 1.35;
 
-        gsap.to(storyTrack, {
-          x: () => -getScrollDistance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: storySection,
-            start: "top top",
-            end: () => `+=${getScrollDistance() * scrollHoldMultiplier}`,
-            pin: true,
-            // The page shell is a flex column, so margin spacing keeps later sections below the pin.
-            pinSpacing: "margin",
-            scrub: 0.65,
-            snap: {
-              snapTo: 1 / (slideCount - 1),
-              duration: { min: 0.45, max: 0.8 },
-              delay: 0.16,
-              ease: "power1.inOut",
-              inertia: false,
+          gsap.to(storyTrack, {
+            x: () => -getScrollDistance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: storySection,
+              start: "top top",
+              end: () => `+=${getScrollDistance() * scrollHoldMultiplier}`,
+              pin: true,
+              // The page shell is a flex column, so margin spacing keeps later sections below the pin.
+              pinSpacing: "margin",
+              scrub: 0.65,
+              snap: {
+                snapTo: 1 / (slideCount - 1),
+                duration: { min: 0.45, max: 0.8 },
+                delay: 0.16,
+                ease: "power1.inOut",
+                inertia: false,
+              },
+              anticipatePin: 1,
+              // Consume the wheel movement that first reaches the pin so chapter one stays aligned.
+              onEnter: (self) => self.scroll(self.start),
+              onEnterBack: (self) => self.scroll(self.end),
+              invalidateOnRefresh: true,
             },
-            anticipatePin: 1,
-            // Consume the wheel movement that first reaches the pin so chapter one stays aligned.
-            onEnter: (self) => self.scroll(self.start),
-            onEnterBack: (self) => self.scroll(self.end),
-            invalidateOnRefresh: true,
-          },
+          });
         });
+
       }
 
       // Let each hobby card enter calmly, then respond to pointer and keyboard focus in CSS.
@@ -178,6 +182,7 @@ export default function HeroAnimations({ children }) {
 
       // Recalculate trigger positions after the complete page animation setup.
       ScrollTrigger.refresh();
+      return () => storyMedia.revert();
     },
     { scope: pageRef },
   );
