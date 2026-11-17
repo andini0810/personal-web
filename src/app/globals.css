@@ -102,8 +102,9 @@ html { overflow-x: clip; }
 .story-gallery-kkn .story-photo:nth-child(3) { transform: translateY(-12px); }
 
 .story-photo figcaption { position: absolute; right: 9px; bottom: 8px; padding: 4px 6px; color: var(--color-ink); background: rgba(244, 241, 235, .88); font-family: var(--font-label); font-size: 8px; }
-.story-progress { display: flex; justify-content: flex-end; gap: 16px; margin-top: 18px; color: var(--color-muted); font-family: var(--font-label); font-size: 8px; letter-spacing: .1em; }
-.story-progress span:first-child { color: var(--color-editorial); }
+.story-progress { display: flex; justify-content: flex-end; gap: 16px; margin-top: 18px; color: var(--color-muted); font-family: var(--font-label); font-size: 11px; letter-spacing: .1em; }
+.story-progress span { display: inline-block; transform-origin: center; transition: color 180ms ease; }
+.story-progress span.is-active { color: var(--color-editorial); }
 
 /* Hobby icons stay plain; their details float out of the card on hover. */
 .hobby-trigger {
@@ -144,7 +145,7 @@ html { overflow-x: clip; }
   .story-gallery { height: clamp(190px, 30svh, 260px); gap: 12px; }
   .story-gallery-student-staff { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); height: clamp(300px, 42svh, 420px); }
   .story-gallery-expo .story-photo:last-child { margin-top: 18px; }
-  .story-progress { margin: 16px 20px 0; gap: 12px; }
+  .story-progress { margin: 16px 20px 0; gap: 14px; font-size: 12px; }
   .hobby-trigger { width: 96px; height: 96px; }
   .hobby-trigger .netflix-mark { font-size: 58px; }
   .hobby-trigger svg { width: 48px; height: 48px; }
@@ -881,6 +882,11 @@ html { overflow-x: clip; }
   color: var(--color-ink);
   background: #fffefa;
   box-shadow: 0 18px 42px rgba(38, 40, 36, .16);
+  animation: contact-popover-enter 220ms cubic-bezier(.2, .75, .25, 1) both;
+}
+@keyframes contact-popover-enter {
+  from { opacity: 0; translate: 0 8px; scale: .98; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
 }
 .contact-popover-heading {
   margin: 0 0 8px;
@@ -1096,6 +1102,8 @@ html { overflow-x: clip; }
   .hobby-item,
   .hobby-trigger,
   .hobby-popover { transition: none; }
+
+  .contact-popover { animation: none; }
 }
 
 /* Keep the contact menu centered and fully visible on narrow screens. */

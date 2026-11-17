@@ -16,6 +16,7 @@ export default function HeroAnimations({ children }) {
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
+      // Respect the system motion preference and leave all content visible.
       if (prefersReducedMotion) return;
 
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -43,65 +44,65 @@ export default function HeroAnimations({ children }) {
           "-=0.35",
         );
 
-      // Reveal project copy when it enters the viewport.
-      gsap.utils
-        .toArray(".project-showcase")
-        .forEach((project) => {
-          const projectCopy = project.querySelector(".project-copy");
-          const screenshots = project.querySelectorAll(".project-gallery-item");
-          if (projectCopy) {
-            gsap.fromTo(
-              projectCopy.children,
-              { y: 30, autoAlpha: 0 },
-              {
-                y: 0,
-                autoAlpha: 1,
-                duration: 0.7,
-                stagger: 0.1,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: projectCopy,
-                  start: "top 94%",
-                  once: true,
-                  invalidateOnRefresh: true,
-                },
+      // Reveal project copy and screenshots once as each project enters view.
+      gsap.utils.toArray(".project-showcase").forEach((project) => {
+        const projectCopy = project.querySelector(".project-copy");
+        const screenshots = project.querySelectorAll(".project-gallery-item");
+
+        if (projectCopy) {
+          gsap.fromTo(
+            projectCopy.children,
+            { y: 24, autoAlpha: 0 },
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: 0.65,
+              stagger: 0.08,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: project,
+                start: "top 82%",
+                once: true,
               },
-            );
+            },
+          );
+        }
+
+        screenshots.forEach((screenshot, imageIndex) => {
+          const from = { y: 32, scale: 0.97, autoAlpha: 0 };
+
+          if (project.classList.contains("project-showcase-bloom")) {
+            if (imageIndex === 1) Object.assign(from, { x: 24, y: -16 });
+            if (imageIndex === 2) Object.assign(from, { x: -24, y: 18 });
           }
 
-          screenshots.forEach((screenshot, imageIndex) => {
-            const from = { y: 56, scale: 0.9, autoAlpha: 0 };
+          if (
+            project.classList.contains("project-showcase-homeplate") &&
+            imageIndex === 1
+          ) {
+            Object.assign(from, { x: -22, y: 22 });
+          }
 
-            if (project.classList.contains("project-showcase-bloom")) {
-              if (imageIndex === 1) Object.assign(from, { x: 46, y: -28 });
-              if (imageIndex === 2) Object.assign(from, { x: -46, y: 34 });
-            }
-
-            if (project.classList.contains("project-showcase-homeplate") && imageIndex === 1) {
-              Object.assign(from, { x: -38, y: 38 });
-            }
-
-            gsap.fromTo(
-              screenshot,
-              from,
-              {
-                x: 0,
-                y: 0,
-                scale: 1,
-                autoAlpha: 1,
-                duration: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: screenshot,
-                  start: "top 98%",
-                  end: "top 60%",
-                  scrub: 0.65,
-                  invalidateOnRefresh: true,
-                },
+          gsap.fromTo(
+            screenshot,
+            from,
+            {
+              x: 0,
+              y: 0,
+              scale: 1,
+              autoAlpha: 1,
+              duration: 0.7,
+              delay: imageIndex * 0.1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: project,
+                start: "top 82%",
+                once: true,
               },
-            );
-          });
+            },
+          );
         });
+      });
 
       gsap.utils.toArray(".page-footer > *").forEach((item) => {
         gsap.from(item, {
@@ -117,13 +118,41 @@ export default function HeroAnimations({ children }) {
       const storySection = pageRef.current?.querySelector(".about-section");
       const storyTrack = pageRef.current?.querySelector(".story-track");
       const storyViewport = pageRef.current?.querySelector(".story-viewport");
+      const storyNumbers = gsap.utils.toArray(".story-progress span");
       const storyMedia = gsap.matchMedia();
+      let activeStoryIndex = -1;
+
+      const setActiveStoryNumber = (index) => {
+        if (index === activeStoryIndex) return;
+        activeStoryIndex = index;
+
+        storyNumbers.forEach((number, numberIndex) => {
+          const isActive = numberIndex === index;
+          number.classList.toggle("is-active", isActive);
+          gsap.to(number, {
+            y: isActive ? -2 : 0,
+            scale: isActive ? 1.12 : 1,
+            duration: 0.22,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        });
+      };
+
+      const updateMobileStoryNumber = () => {
+        if (!storyViewport) return;
+        const index = Math.round(storyViewport.scrollLeft / storyViewport.clientWidth);
+        setActiveStoryNumber(index);
+      };
 
       if (storySection && storyTrack && storyViewport) {
+        setActiveStoryNumber(0);
+        storyViewport.addEventListener("scroll", updateMobileStoryNumber, { passive: true });
+
         storyMedia.add("(min-width: 761px)", () => {
           const getScrollDistance = () => storyTrack.scrollWidth - storyViewport.clientWidth;
           const slideCount = storyTrack.children.length;
-          const scrollHoldMultiplier = 1.35;
+          const scrollHoldMultiplier = 1.2;
 
           gsap.to(storyTrack, {
             x: () => -getScrollDistance(),
@@ -135,13 +164,16 @@ export default function HeroAnimations({ children }) {
               pin: true,
               // The page shell is a flex column, so margin spacing keeps later sections below the pin.
               pinSpacing: "margin",
-              scrub: 0.65,
+              scrub: 0.5,
               snap: {
                 snapTo: 1 / (slideCount - 1),
-                duration: { min: 0.45, max: 0.8 },
-                delay: 0.16,
+                duration: { min: 0.35, max: 0.65 },
+                delay: 0.1,
                 ease: "power1.inOut",
                 inertia: false,
+              },
+              onUpdate: (self) => {
+                setActiveStoryNumber(Math.round(self.progress * (slideCount - 1)));
               },
               anticipatePin: 1,
               // Consume the wheel movement that first reaches the pin so chapter one stays aligned.
@@ -182,7 +214,10 @@ export default function HeroAnimations({ children }) {
 
       // Recalculate trigger positions after the complete page animation setup.
       ScrollTrigger.refresh();
-      return () => storyMedia.revert();
+      return () => {
+        storyViewport?.removeEventListener("scroll", updateMobileStoryNumber);
+        storyMedia.revert();
+      };
     },
     { scope: pageRef },
   );

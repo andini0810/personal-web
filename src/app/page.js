@@ -132,7 +132,7 @@ const translations = {
             { src: "/images/Bloom2.png", label: "Topics", alt: "Bloom health topics page design" },
             { src: "/images/Bloom3.png", label: "Ask anonymusly", alt: "Bloom health assistant page design" },
           ],
-          url: "", // Add the Bloom demo URL here when it is available.
+          url: "https://www.figma.com/design/cj4kaQqU6BfGDyJsbbhneg/Bloom?node-id=0-1&t=ON5YMrIHiq0Be8qv-1", // Add the Bloom demo URL here when it is available.
         },
         {
           id: "homeplate",
@@ -151,7 +151,7 @@ const translations = {
             { src: "/images/homeplate.jpg", label: "Desktop", alt: "HomePlate desktop landing page design" },
             { src: "/images/homeplate1.png", label: "Mobile", alt: "HomePlate mobile landing page design" },
           ],
-          url: "", // Add the HomePlate demo URL here when it is available.
+          url: "https://homeplate-zeta.vercel.app/", // Add the HomePlate demo URL here when it is available.
         },
         {
           id: "ojyms",
@@ -169,7 +169,7 @@ const translations = {
           images: [
             { src: "/images/OJYMS.png", label: "Career portal", alt: "OJYMS career and alumni mentorship platform homepage" },
           ],
-          url: "", // Add the OJYMS demo URL here when it is available.
+          url: "https://github.com/andini0810/OJYMS", // Add the OJYMS demo URL here when it is available.
         },
       ],
     },
