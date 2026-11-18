@@ -1167,6 +1167,8 @@ html { overflow-x: clip; }
     padding: 14px;
     transform: translate(-50%, 12px) scale(.98);
   }
+  /* Keep the movie panel centered; the generic mobile hover rule below must
+     not replace its horizontal centering transform. */
   .hobby-item-movies:hover .hobby-popover,
   .hobby-item-movies:focus-within .hobby-popover,
   .hobby-item-movies[data-open="true"] .hobby-popover { transform: translate(-50%, 0) scale(1); }
@@ -1182,9 +1184,9 @@ html { overflow-x: clip; }
   .movie-panel-message,
   .movie-panel-hint { font-size: 10px; }
   .tmdb-attribution p { font-size: 8px; }
-  .hobby-item:hover .hobby-popover,
-  .hobby-item:focus-within .hobby-popover,
-  .hobby-item[data-open="true"] .hobby-popover { transform: translateY(0) scale(1); }
+  .hobby-item:not(.hobby-item-movies):hover .hobby-popover,
+  .hobby-item:not(.hobby-item-movies):focus-within .hobby-popover,
+  .hobby-item:not(.hobby-item-movies)[data-open="true"] .hobby-popover { transform: translateY(0) scale(1); }
   .hobby-popover-content { gap: 7px; }
   .popover-kicker { font-size: 7px; }
   .genre-list { gap: 5px; }
