@@ -155,6 +155,24 @@ html { overflow-x: clip; }
   .gym-equipment { min-width: 76px; font-size: 7px; }
 }
 
+/* Keep hobby cards level across breakpoints while preserving the editorial layout. */
+.hobby-grid { align-items: stretch; }
+.hobby-item,
+.hobby-item-1,
+.hobby-item-2,
+.hobby-item-3 { transform: none; }
+.hobby-trigger { align-self: center; }
+@media (min-width: 761px) {
+  .hobby-item { min-height: 278px; }
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  .hobby-item:last-child { width: min(100%, 50%); }
+}
+@media (max-width: 760px) {
+  .hobby-item { min-height: 142px; }
+  .hobby-trigger { align-self: center; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .about-section { min-height: 0; align-items: stretch; overflow: visible; }
   .story-viewport { overflow: visible; }

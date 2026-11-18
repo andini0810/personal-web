@@ -19,6 +19,12 @@ export default function HeroAnimations({ children }) {
       // Respect the system motion preference and leave all content visible.
       if (prefersReducedMotion) return;
 
+      // Keep scroll reveals inside the active component scope, and refresh once
+      // the browser has completed layout so desktop triggers use final positions.
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       intro
@@ -43,76 +49,6 @@ export default function HeroAnimations({ children }) {
           { autoAlpha: 0, duration: 0.45 },
           "-=0.35",
         );
-
-      // Reveal project copy and screenshots once as each project enters view.
-      gsap.utils.toArray(".project-showcase").forEach((project) => {
-        const projectCopy = project.querySelector(".project-copy");
-        const screenshots = project.querySelectorAll(".project-gallery-item");
-
-        if (projectCopy) {
-          gsap.fromTo(
-            projectCopy.children,
-            { y: 24, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.65,
-              stagger: 0.08,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: project,
-                start: "top 82%",
-                once: true,
-              },
-            },
-          );
-        }
-
-        screenshots.forEach((screenshot, imageIndex) => {
-          const from = { y: 32, scale: 0.97, autoAlpha: 0 };
-
-          if (project.classList.contains("project-showcase-bloom")) {
-            if (imageIndex === 1) Object.assign(from, { x: 24, y: -16 });
-            if (imageIndex === 2) Object.assign(from, { x: -24, y: 18 });
-          }
-
-          if (
-            project.classList.contains("project-showcase-homeplate") &&
-            imageIndex === 1
-          ) {
-            Object.assign(from, { x: -22, y: 22 });
-          }
-
-          gsap.fromTo(
-            screenshot,
-            from,
-            {
-              x: 0,
-              y: 0,
-              scale: 1,
-              autoAlpha: 1,
-              duration: 0.7,
-              delay: imageIndex * 0.1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: project,
-                start: "top 82%",
-                once: true,
-              },
-            },
-          );
-        });
-      });
-
-      gsap.utils.toArray(".page-footer > *").forEach((item) => {
-        gsap.from(item, {
-          y: 18,
-          autoAlpha: 0,
-          duration: 0.55,
-          ease: "power3.out",
-          scrollTrigger: { trigger: item, start: "top 92%", once: true },
-        });
-      });
 
       // Pin the story section while vertical scrolling moves its chapters sideways.
       const storySection = pageRef.current?.querySelector(".about-section");
@@ -186,6 +122,27 @@ export default function HeroAnimations({ children }) {
 
       }
 
+      // Register the pinned story trigger before downstream project triggers,
+      // so refresh calculates the portfolio start positions after pin spacing.
+      gsap.utils.toArray(".project-showcase").forEach((project) => {
+        const copy = project.querySelector(".project-copy");
+        const galleryItems = project.querySelectorAll(".project-gallery-item");
+        const timeline = gsap.timeline({
+          defaults: { duration: 0.65, ease: "power3.out" },
+          scrollTrigger: {
+            trigger: project,
+            start: "top 88%",
+            toggleActions: "play reverse play reverse",
+            invalidateOnRefresh: true,
+          },
+        });
+
+        if (copy) timeline.fromTo(copy, { y: 28 }, { y: 0 }, 0);
+        if (galleryItems.length) {
+          timeline.fromTo(galleryItems, { y: 22, scale: 0.985 }, { y: 0, scale: 1, stagger: 0.1 }, 0.08);
+        }
+      });
+
       // Let each hobby card enter calmly, then respond to pointer and keyboard focus in CSS.
       gsap.from(".hobby-item", {
         y: 36,
@@ -194,11 +151,7 @@ export default function HeroAnimations({ children }) {
         duration: 0.7,
         stagger: 0.14,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".hobbies-section",
-          start: "top 72%",
-          once: true,
-        },
+        scrollTrigger: { trigger: ".hobbies-section", start: "top 82%", once: true },
       });
 
       gsap.to(".portrait-placeholder", {
@@ -212,12 +165,33 @@ export default function HeroAnimations({ children }) {
         },
       });
 
-      // Recalculate trigger positions after the complete page animation setup.
-      ScrollTrigger.refresh();
+      // Refresh after image and font layout settles: story pin spacing changes
+      // document geometry used by every portfolio trigger below it.
+      let refreshFrame = 0;
+      const refreshAfterLayout = () => {
+        cancelAnimationFrame(refreshFrame);
+        refreshFrame = requestAnimationFrame(() => {
+          refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+        });
+      };
+      const pageImages = Array.from(pageRef.current?.querySelectorAll("img") ?? []);
+      const assetsReady = Promise.allSettled([
+        document.fonts?.ready ?? Promise.resolve(),
+        ...pageImages.map((image) => image.decode?.().catch(() => undefined) ?? Promise.resolve()),
+      ]);
+      assetsReady.then(refreshAfterLayout);
+      window.addEventListener("load", refreshAfterLayout);
+      window.addEventListener("resize", refreshAfterLayout);
       return () => {
+        cancelAnimationFrame(refreshFrame);
+        window.removeEventListener("load", refreshAfterLayout);
+        window.removeEventListener("resize", refreshAfterLayout);
         storyViewport?.removeEventListener("scroll", updateMobileStoryNumber);
         storyMedia.revert();
       };
+      });
+
+      return () => mm.revert();
     },
     { scope: pageRef },
   );
