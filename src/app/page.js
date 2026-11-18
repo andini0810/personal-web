@@ -833,6 +833,7 @@ export default function Home() {
             <p className="eyebrow">{copy.portfolio.eyebrow}</p>
             <h2 id="portfolio-title">{copy.portfolio.title}</h2>
             <p className="portfolio-intro">{copy.portfolio.introduction}</p>
+            <div className="project-scroll-line" aria-hidden="true"><span /></div>
 
             <div className="project-list">
               {copy.portfolio.projects.map((project, index) => (

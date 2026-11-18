@@ -124,22 +124,47 @@ export default function HeroAnimations({ children }) {
 
       // Register the pinned story trigger before downstream project triggers,
       // so refresh calculates the portfolio start positions after pin spacing.
+      const portfolio = pageRef.current?.querySelector(".portfolio-section");
+      const projectList = portfolio?.querySelector(".project-list");
+      const progressLine = portfolio?.querySelector(".project-scroll-line span");
+      if (projectList && progressLine) {
+        gsap.set(progressLine, { scaleX: 0, transformOrigin: "left center" });
+        gsap.to(progressLine, {
+          scaleX: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: projectList,
+            start: "top 82%",
+            end: "bottom 32%",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+
       gsap.utils.toArray(".project-showcase").forEach((project) => {
         const copy = project.querySelector(".project-copy");
         const galleryItems = project.querySelectorAll(".project-gallery-item");
         const timeline = gsap.timeline({
-          defaults: { duration: 0.65, ease: "power3.out" },
+          defaults: { ease: "power3.out" },
           scrollTrigger: {
             trigger: project,
-            start: "top 88%",
-            toggleActions: "play reverse play reverse",
+            start: "top 82%",
+            end: "bottom 38%",
+            scrub: true,
             invalidateOnRefresh: true,
           },
         });
 
-        if (copy) timeline.fromTo(copy, { y: 28 }, { y: 0 }, 0);
+        if (copy) timeline.fromTo(copy,
+          { x: -56, y: 28, immediateRender: false },
+          { x: 0, y: 0, duration: 1 },
+          0,
+        );
         if (galleryItems.length) {
-          timeline.fromTo(galleryItems, { y: 22, scale: 0.985 }, { y: 0, scale: 1, stagger: 0.1 }, 0.08);
+          timeline.fromTo(galleryItems, { x: 52, y: 30, scale: 0.95, immediateRender: false }, {
+            x: 0, y: 0, scale: 1, duration: 1, stagger: 0.12,
+          }, 0.08);
         }
       });
 
